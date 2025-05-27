@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,11 @@ namespace StudyChem.Forms
         private ComboBox cmbTopics;
         private Button btnStart;
         private Button btnSubmit;
+        private Button btnPlayAgain;
+        private Button btnExit;
+        private Label lblQuestion;
+        private Label lblStats;
+        private TextBox txtStats;
 
         public MainForm(User user)
         {
@@ -29,28 +35,36 @@ namespace StudyChem.Forms
         private void InitializeQuizUI()
         {
             this.Text = $"StudyChem - Welcome {currentUser.Username}";
-            this.Width = 700;
-            this.Height = 600;
+            this.Width = 750;
+            this.Height = 700;
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
 
             var lblSelectTopic = new Label { Text = "Select Topic:", Left = 10, Top = 10 };
-            cmbTopics = new ComboBox { Left = 100, Top = 10, Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
-            btnStart = new Button { Text = "Start Quiz", Left = 320, Top = 10 };
+            cmbTopics = new ComboBox { Left = 100, Top = 10, Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
+            btnStart = new Button { Text = "Begin Quiz", Left = 370, Top = 10, Width = 100 };
 
-            var lblQuestion = new Label { Top = 60, Left = 10, Width = 650, Height = 60 };
-            btnSubmit = new Button { Text = "Submit", Top = 270, Left = 10, Enabled = false };
+            lblQuestion = new Label { Top = 60, Left = 10, Width = 700, Height = 60, Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold) };
+            btnSubmit = new Button { Text = "Submit", Top = 270, Left = 10, Enabled = false, Width = 100 };
 
-            var txtStats = new TextBox
+            btnPlayAgain = new Button { Text = "Play Again", Top = 270, Left = 120, Width = 100, Visible = false };
+            btnExit = new Button { Text = "Exit", Top = 10, Left = 650, Width = 70, Visible = true };
+
+            lblStats = new Label { Text = "Your Performance:", Top = 310, Left = 10, Width = 300, Font = new System.Drawing.Font("Segoe UI", 9, System.Drawing.FontStyle.Bold) };
+
+            txtStats = new TextBox
             {
                 Multiline = true,
                 ReadOnly = true,
                 ScrollBars = ScrollBars.Vertical,
-                Top = 320,
+                Top = 340,
                 Left = 10,
-                Width = 650,
-                Height = 200
+                Width = 700,
+                Height = 280,
+                Font = new System.Drawing.Font("Consolas", 9)
             };
 
-            // Load quizzes
             allQuizzes = Quiz.LoadAllPreloadedQuizzes();
             foreach (var key in allQuizzes.Keys)
                 cmbTopics.Items.Add(key);
@@ -74,7 +88,9 @@ namespace StudyChem.Forms
                 currentIndex = 0;
                 earnedPoints = 0;
                 btnStart.Enabled = false;
-                cmbTopics.Enabled = false;
+                cmbTopics.Visible = false;
+                btnPlayAgain.Visible = false;
+                btnExit.Visible = false;
                 ShowQuestion();
             };
 
@@ -113,10 +129,27 @@ namespace StudyChem.Forms
                     currentUser.Results.Add(new UserResult { Score = percent, Timestamp = DateTime.Now });
                     currentUser.Save();
                     DisplayStats();
-                    btnStart.Enabled = true;
-                    cmbTopics.Enabled = true;
                     btnSubmit.Enabled = false;
+                    btnPlayAgain.Visible = true;
+                    // Keep exit button always visible in top corner (no need to reset visibility)
                 }
+            };
+
+            btnPlayAgain.Click += (s, e) =>
+            {
+                cmbTopics.Visible = true;
+                btnStart.Enabled = true;
+                btnPlayAgain.Visible = false;
+                btnExit.Visible = false;
+                lblQuestion.Text = "";
+                foreach (var rb in optionButtons)
+                    Controls.Remove(rb);
+                optionButtons.Clear();
+            };
+
+            btnExit.Click += (s, e) =>
+            {
+                Application.Exit();
             };
 
             void ShowQuestion()
@@ -135,7 +168,7 @@ namespace StudyChem.Forms
                 List<string> opts = currentQuestion.Type == "TF" ? new List<string> { "True", "False" } : currentQuestion.Options;
                 foreach (var option in opts)
                 {
-                    var rb = new RadioButton { Text = option, Left = 10, Top = top, Width = 600 };
+                    var rb = new RadioButton { Text = option, Left = 10, Top = top, Width = 700 };
                     rb.CheckedChanged += Option_CheckedChanged;
                     optionButtons.Add(rb);
                     Controls.Add(rb);
@@ -153,7 +186,7 @@ namespace StudyChem.Forms
             void DisplayStats()
             {
                 txtStats.Clear();
-                txtStats.AppendText("Your past quiz results:\r\n");
+                txtStats.AppendText("Your past quiz results:\r\n\r\n");
                 foreach (var r in currentUser.Results.OrderByDescending(r => r.Timestamp))
                 {
                     txtStats.AppendText($"{r.Timestamp:g} - {r.Score:F1}%\r\n");
@@ -165,6 +198,9 @@ namespace StudyChem.Forms
             Controls.Add(btnStart);
             Controls.Add(lblQuestion);
             Controls.Add(btnSubmit);
+            Controls.Add(btnPlayAgain);
+            Controls.Add(btnExit);
+            Controls.Add(lblStats);
             Controls.Add(txtStats);
 
             DisplayStats();
