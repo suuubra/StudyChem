@@ -11,6 +11,7 @@ namespace StudyChem.Forms
         public LoginForm()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             InitializeLoginUI();
         }
 
@@ -32,10 +33,10 @@ namespace StudyChem.Forms
                 if (user != null && user.VerifyPassword(txtPassword.Text))
                 {
                     LoggedInUser = user;
-                    DialogResult = DialogResult.OK;
-                    MainForm mForm = new MainForm(user);
-                    mForm.ShowDialog();
-                    Close();
+                    this.Hide();
+                    var main = new MainForm(LoggedInUser);
+                    main.ShowDialog();
+                    this.Close();
                 }
                 else
                 {

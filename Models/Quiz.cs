@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Quiz.cs - Cleaned up to remove duplicate Question class
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -20,7 +22,7 @@ namespace StudyChem.Models
         public static Dictionary<string, Quiz> LoadAllPreloadedQuizzes()
         {
             var quizzes = new Dictionary<string, Quiz>();
-            string[] quizFiles = Directory.GetFiles("Data/quizzes", "*.json");
+            string[] quizFiles = Directory.GetFiles(AppConstants.QuizDataFolder, "*.json");
             foreach (var file in quizFiles)
             {
                 var quiz = LoadFromFile(file);
@@ -31,8 +33,8 @@ namespace StudyChem.Models
 
         public void Shuffle()
         {
-            var rnd = new System.Random();
-            Questions = new List<Question>(Questions.OrderBy(q => rnd.Next()));
+            var rnd = new Random();
+            Questions = Questions.OrderBy(q => rnd.Next()).ToList();
         }
     }
 }

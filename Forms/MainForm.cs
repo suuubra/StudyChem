@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,6 +20,7 @@ namespace StudyChem.Forms
         private Button btnSubmit;
         private Button btnPlayAgain;
         private Button btnExit;
+        private Button btnExportStats;
         private Label lblQuestion;
         private Label lblStats;
         private TextBox txtStats;
@@ -36,7 +36,7 @@ namespace StudyChem.Forms
         {
             this.Text = $"StudyChem - Welcome {currentUser.Username}";
             this.Width = 750;
-            this.Height = 700;
+            this.Height = 740;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -52,7 +52,6 @@ namespace StudyChem.Forms
             btnExit = new Button { Text = "Exit", Top = 10, Left = 650, Width = 70, Visible = true };
 
             lblStats = new Label { Text = "Your Performance:", Top = 310, Left = 10, Width = 300, Font = new System.Drawing.Font("Segoe UI", 9, System.Drawing.FontStyle.Bold) };
-
             txtStats = new TextBox
             {
                 Multiline = true,
@@ -63,6 +62,21 @@ namespace StudyChem.Forms
                 Width = 700,
                 Height = 280,
                 Font = new System.Drawing.Font("Consolas", 9)
+            };
+
+            btnExportStats = new Button { Text = "Export Stats", Top = 630, Left = 10, Width = 120 };
+            btnExportStats.Click += (s, e) =>
+            {
+                if (currentUser.Results.Count == 0)
+                {
+                    MessageBox.Show("No results to export.");
+                    return;
+                }
+
+                Directory.CreateDirectory(AppConstants.StatsDataFolder);
+                string statsPath = Path.Combine(AppConstants.StatsDataFolder, currentUser.Username + "_results.json");
+                File.WriteAllText(statsPath, Newtonsoft.Json.JsonConvert.SerializeObject(currentUser.Results, Newtonsoft.Json.Formatting.Indented));
+                MessageBox.Show("Stats exported to: " + statsPath);
             };
 
             allQuizzes = Quiz.LoadAllPreloadedQuizzes();
@@ -90,7 +104,6 @@ namespace StudyChem.Forms
                 btnStart.Enabled = false;
                 cmbTopics.Visible = false;
                 btnPlayAgain.Visible = false;
-                btnExit.Visible = false;
                 ShowQuestion();
             };
 
@@ -125,13 +138,12 @@ namespace StudyChem.Forms
                 {
                     int totalPoints = currentQuiz.Questions.Sum(q => q.Points);
                     double percent = (double)earnedPoints / totalPoints * 100;
-                    MessageBox.Show(string.Format("Quiz complete! Score: {0:F1}%", percent));
+                    MessageBox.Show($"Quiz complete! Score: {percent:F1}%");
                     currentUser.Results.Add(new UserResult { Score = percent, Timestamp = DateTime.Now });
                     currentUser.Save();
                     DisplayStats();
                     btnSubmit.Enabled = false;
                     btnPlayAgain.Visible = true;
-                    // Keep exit button always visible in top corner (no need to reset visibility)
                 }
             };
 
@@ -140,58 +152,13 @@ namespace StudyChem.Forms
                 cmbTopics.Visible = true;
                 btnStart.Enabled = true;
                 btnPlayAgain.Visible = false;
-                btnExit.Visible = false;
                 lblQuestion.Text = "";
                 foreach (var rb in optionButtons)
                     Controls.Remove(rb);
                 optionButtons.Clear();
             };
 
-            btnExit.Click += (s, e) =>
-            {
-                Application.Exit();
-            };
-
-            void ShowQuestion()
-            {
-                var currentQuestion = currentQuiz.Questions[currentIndex];
-                lblQuestion.Text = $"Q{currentIndex + 1}: {currentQuestion.Prompt}";
-
-                foreach (var rb in optionButtons)
-                {
-                    rb.CheckedChanged -= Option_CheckedChanged;
-                    Controls.Remove(rb);
-                }
-                optionButtons.Clear();
-
-                int top = 130;
-                List<string> opts = currentQuestion.Type == "TF" ? new List<string> { "True", "False" } : currentQuestion.Options;
-                foreach (var option in opts)
-                {
-                    var rb = new RadioButton { Text = option, Left = 10, Top = top, Width = 700 };
-                    rb.CheckedChanged += Option_CheckedChanged;
-                    optionButtons.Add(rb);
-                    Controls.Add(rb);
-                    top += 30;
-                }
-
-                btnSubmit.Enabled = false;
-            }
-
-            void Option_CheckedChanged(object sender, EventArgs e)
-            {
-                btnSubmit.Enabled = optionButtons.Any(rb => rb.Checked);
-            }
-
-            void DisplayStats()
-            {
-                txtStats.Clear();
-                txtStats.AppendText("Your past quiz results:\r\n\r\n");
-                foreach (var r in currentUser.Results.OrderByDescending(r => r.Timestamp))
-                {
-                    txtStats.AppendText($"{r.Timestamp:g} - {r.Score:F1}%\r\n");
-                }
-            }
+            btnExit.Click += (s, e) => Application.Exit();
 
             Controls.Add(lblSelectTopic);
             Controls.Add(cmbTopics);
@@ -202,8 +169,50 @@ namespace StudyChem.Forms
             Controls.Add(btnExit);
             Controls.Add(lblStats);
             Controls.Add(txtStats);
+            Controls.Add(btnExportStats);
 
             DisplayStats();
+        }
+
+        private void ShowQuestion()
+        {
+            var currentQuestion = currentQuiz.Questions[currentIndex];
+            lblQuestion.Text = $"Q{currentIndex + 1}: {currentQuestion.Prompt}";
+
+            foreach (var rb in optionButtons)
+            {
+                rb.CheckedChanged -= Option_CheckedChanged;
+                Controls.Remove(rb);
+            }
+            optionButtons.Clear();
+
+            int top = 130;
+            List<string> opts = currentQuestion.Type == "TF" ? new List<string> { "True", "False" } : currentQuestion.Options;
+            foreach (var option in opts)
+            {
+                var rb = new RadioButton { Text = option, Left = 10, Top = top, Width = 700 };
+                rb.CheckedChanged += Option_CheckedChanged;
+                optionButtons.Add(rb);
+                Controls.Add(rb);
+                top += 30;
+            }
+
+            btnSubmit.Enabled = false;
+        }
+
+        private void Option_CheckedChanged(object sender, EventArgs e)
+        {
+            btnSubmit.Enabled = optionButtons.Any(rb => rb.Checked);
+        }
+
+        private void DisplayStats()
+        {
+            txtStats.Clear();
+            txtStats.AppendText("Your past quiz results:\r\n\r\n");
+            foreach (var r in currentUser.Results.OrderByDescending(r => r.Timestamp))
+            {
+                txtStats.AppendText($"{r.Timestamp:g} - {r.Score:F1}%\r\n");
+            }
         }
     }
 }

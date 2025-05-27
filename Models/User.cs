@@ -13,39 +13,38 @@ namespace StudyChem.Models
         public string PasswordHash { get; set; }
         public List<UserResult> Results { get; set; } = new List<UserResult>();
 
-        public bool VerifyPassword(string password)
-        {
-            return PasswordHash == Hash(password);
-        }
-
         public void Save()
         {
-            string path = $"Data/users/{Username}.json";
-            Directory.CreateDirectory("Data/users");
+            Directory.CreateDirectory(AppConstants.UserDataFolder);
+            string path = Path.Combine(AppConstants.UserDataFolder, Username + ".json");
             File.WriteAllText(path, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
 
         public static User Load(string username)
         {
-            string path = $"Data/users/{username}.json";
+            string path = Path.Combine(AppConstants.UserDataFolder, username + ".json");
             if (!File.Exists(path)) return null;
             return JsonConvert.DeserializeObject<User>(File.ReadAllText(path));
         }
 
+        public bool VerifyPassword(string password)
+        {
+            return PasswordHash == Hash(password);
+        }
+
         public static string Hash(string input)
         {
-            using (var sha = SHA256.Create())
+            using (SHA256 sha256 = SHA256.Create())
             {
-                var bytes = Encoding.UTF8.GetBytes(input);
-                var hashBytes = sha.ComputeHash(bytes);
-                return Convert.ToBase64String(hashBytes);
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(input));
+                return BitConverter.ToString(bytes).Replace("-", "").ToLower();
             }
         }
     }
 
     public class UserResult
     {
-        public DateTime Timestamp { get; set; }
         public double Score { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

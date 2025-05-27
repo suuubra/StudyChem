@@ -9,50 +9,74 @@ namespace StudyChem.Forms
         public RegisterForm()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             InitializeRegisterUI();
         }
 
         private void InitializeRegisterUI()
         {
             this.Text = "StudyChem - Register";
-            this.Width = 300;
-            this.Height = 200;
+            this.Width = 320;
+            this.Height = 270;
 
-            var lblUsername = new Label() { Text = "New Username:", Left = 10, Top = 20 };
-            var txtUsername = new TextBox() { Left = 120, Top = 20, Width = 150 };
+            var lblUsername = new Label() { Text = "Username:", Left = 10, Top = 20 };
+            var txtUsername = new TextBox() { Left = 100, Top = 20, Width = 180 };
+
             var lblPassword = new Label() { Text = "Password:", Left = 10, Top = 60 };
-            var txtPassword = new TextBox() { Left = 120, Top = 60, Width = 150, UseSystemPasswordChar = true };
+            var txtPassword = new TextBox() { Left = 100, Top = 60, Width = 180, UseSystemPasswordChar = true };
 
-            var btnCreate = new Button() { Text = "Create Account", Left = 120, Top = 100 };
+            var lblConfirm = new Label() { Text = "Confirm:", Left = 10, Top = 100 };
+            var txtConfirm = new TextBox() { Left = 100, Top = 100, Width = 180, UseSystemPasswordChar = true };
+
+            var chkShow = new CheckBox() { Text = "Show Password", Left = 100, Top = 130 };
+            chkShow.CheckedChanged += (s, e) =>
+            {
+                bool visible = chkShow.Checked;
+                txtPassword.UseSystemPasswordChar = !visible;
+                txtConfirm.UseSystemPasswordChar = !visible;
+            };
+
+            var btnCreate = new Button() { Text = "Create", Left = 100, Top = 160 };
             btnCreate.Click += (sender, e) =>
             {
-                if (string.IsNullOrWhiteSpace(txtUsername.Text) || string.IsNullOrWhiteSpace(txtPassword.Text))
+                string user = txtUsername.Text.Trim();
+                string pass = txtPassword.Text;
+                string confirm = txtConfirm.Text;
+
+                if (user == "" || pass == "")
                 {
-                    MessageBox.Show("Please enter both fields.");
+                    MessageBox.Show("Username and password cannot be empty.");
                     return;
                 }
 
-                var existing = User.Load(txtUsername.Text);
-                if (existing != null)
+                if (pass != confirm)
+                {
+                    MessageBox.Show("Passwords do not match.");
+                    return;
+                }
+
+                if (User.Load(user) != null)
                 {
                     MessageBox.Show("User already exists.");
                     return;
                 }
 
-                var newUser = new User
-                {
-                    Username = txtUsername.Text,
-                    PasswordHash = User.Hash(txtPassword.Text)
-                };
+                var newUser = new User();
+                newUser.Username = user;
+                newUser.PasswordHash = User.Hash(pass);
+                newUser.Results = new System.Collections.Generic.List<UserResult>();
                 newUser.Save();
-                MessageBox.Show("Account created.");
-                Close();
+                MessageBox.Show("User created successfully.");
+                this.Close();
             };
 
             Controls.Add(lblUsername);
             Controls.Add(txtUsername);
             Controls.Add(lblPassword);
             Controls.Add(txtPassword);
+            Controls.Add(lblConfirm);
+            Controls.Add(txtConfirm);
+            Controls.Add(chkShow);
             Controls.Add(btnCreate);
         }
     }

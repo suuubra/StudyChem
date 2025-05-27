@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Question.cs - Centralized class definition
+using System;
+using System.Collections.Generic;
 
 namespace StudyChem.Models
 {
@@ -8,11 +10,11 @@ namespace StudyChem.Models
         public string Answer { get; set; }
         public int Points { get; set; } = 1;
         public List<string> Options { get; set; } = new List<string>();
-        public string Type { get; set; } = "MCQ"; // "MCQ" or "TF"
+        public string Type { get; set; } = "MCQ";
 
         public bool Check(string input)
         {
-            return input.Trim().Equals(Answer.Trim(), System.StringComparison.OrdinalIgnoreCase);
+            return input.Trim().Equals(Answer.Trim(), StringComparison.OrdinalIgnoreCase);
         }
     }
 }
