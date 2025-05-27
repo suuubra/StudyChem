@@ -1,0 +1,21 @@
+﻿[
+  {
+    "Prompt": "What is the electron geometry of methane (CH\u2084)?",
+    "Answer": "Tetrahedral",
+    "Points": 1,
+    "Options": [
+      "Tetrahedral",
+      "Trigonal planar",
+      "Linear",
+      "Bent"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Does ionic bonding involve electron transfer?",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  }
+]

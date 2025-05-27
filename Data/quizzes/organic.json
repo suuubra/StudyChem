@@ -1,0 +1,21 @@
+﻿[
+  {
+    "Prompt": "What is the product of oxidising a primary alcohol?",
+    "Answer": "Carboxylic acid",
+    "Points": 1,
+    "Options": [
+      "Alkene",
+      "Ketone",
+      "Carboxylic acid",
+      "Ester"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Esters are formed by a reaction between an alcohol and a carboxylic acid.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  }
+]

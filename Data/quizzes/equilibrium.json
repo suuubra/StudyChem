@@ -1,0 +1,21 @@
+﻿[
+  {
+    "Prompt": "A catalyst affects the position of equilibrium.",
+    "Answer": "False",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "A large Kc value indicates that the equilibrium lies to the...",
+    "Answer": "Right",
+    "Points": 1,
+    "Options": [
+      "Left",
+      "Right",
+      "Neither",
+      "Unpredictable"
+    ],
+    "Type": "MCQ"
+  }
+]
