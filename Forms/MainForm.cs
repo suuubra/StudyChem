@@ -41,6 +41,8 @@ namespace StudyChem.Forms
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
 
+
+            //Creation of labels and buttons and textboxes
             var lblSelectTopic = new Label { Text = "Select Topic:", Left = 10, Top = 10 };
             cmbTopics = new ComboBox { Left = 100, Top = 10, Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
             btnStart = new Button { Text = "Begin Quiz", Left = 370, Top = 10, Width = 100 };
@@ -63,7 +65,7 @@ namespace StudyChem.Forms
                 Height = 280,
                 Font = new System.Drawing.Font("Consolas", 9)
             };
-
+            //Export system.
             btnExportStats = new Button { Text = "Export Stats", Top = 630, Left = 10, Width = 120 };
             btnExportStats.Click += (s, e) =>
             {
@@ -79,6 +81,7 @@ namespace StudyChem.Forms
                 MessageBox.Show("Stats exported to: " + statsPath);
             };
 
+            //Loading quizzes with foreach loop.
             allQuizzes = Quiz.LoadAllPreloadedQuizzes();
             foreach (var key in allQuizzes.Keys)
                 cmbTopics.Items.Add(key);
@@ -86,6 +89,8 @@ namespace StudyChem.Forms
             if (cmbTopics.Items.Count > 0)
                 cmbTopics.SelectedIndex = 0;
 
+
+            //Start Quizzing system
             btnStart.Click += (s, e) =>
             {
                 var selected = cmbTopics.SelectedItem?.ToString();
@@ -106,7 +111,7 @@ namespace StudyChem.Forms
                 btnPlayAgain.Visible = false;
                 ShowQuestion();
             };
-
+            //Submit question, improved by disabling the submit questions.
             btnSubmit.Click += (s, e) =>
             {
                 if (currentQuiz == null || currentIndex >= currentQuiz.Questions.Count) return;
@@ -146,7 +151,7 @@ namespace StudyChem.Forms
                     btnPlayAgain.Visible = true;
                 }
             };
-
+            //Replay button
             btnPlayAgain.Click += (s, e) =>
             {
                 cmbTopics.Visible = true;
@@ -157,9 +162,9 @@ namespace StudyChem.Forms
                     Controls.Remove(rb);
                 optionButtons.Clear();
             };
-
+            //Exit button.
             btnExit.Click += (s, e) => Application.Exit();
-
+            //Adding Controls to the form.
             Controls.Add(lblSelectTopic);
             Controls.Add(cmbTopics);
             Controls.Add(btnStart);
@@ -170,10 +175,12 @@ namespace StudyChem.Forms
             Controls.Add(lblStats);
             Controls.Add(txtStats);
             Controls.Add(btnExportStats);
-
+            //Display statistics.
             DisplayStats();
         }
-
+        /// <summary>
+        /// Shows questions and loads the type TF or MCQ.
+        /// </summary>
         private void ShowQuestion()
         {
             var currentQuestion = currentQuiz.Questions[currentIndex];
@@ -200,11 +207,13 @@ namespace StudyChem.Forms
             btnSubmit.Enabled = false;
         }
 
+
+        //If the option selected then the button gets enabled.
         private void Option_CheckedChanged(object sender, EventArgs e)
         {
             btnSubmit.Enabled = optionButtons.Any(rb => rb.Checked);
         }
-
+        //Display stats.
         private void DisplayStats()
         {
             txtStats.Clear();

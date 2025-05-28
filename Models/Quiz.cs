@@ -1,4 +1,4 @@
-﻿// Quiz.cs - Cleaned up to remove duplicate Question class
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 
 namespace StudyChem.Models
 {
+    /// <summary>
+    /// Quizzing System, using Newtonsoft.Json to deserializeobject
+    /// </summary>
     public class Quiz
     {
         public string Title { get; set; }
