@@ -18,16 +18,16 @@ namespace StudyChem.Forms
             this.Text = "StudyChem - Register";
             this.Width = 320;
             this.Height = 270;
+            //Construct the labels,etc..
+            var lblUsername = new Label() { Text = "Username:", Left = 5, Top = 20 };
+            var txtUsername = new TextBox() { Left = 105, Top = 20, Width = 180 };
 
-            var lblUsername = new Label() { Text = "Username:", Left = 10, Top = 20 };
-            var txtUsername = new TextBox() { Left = 100, Top = 20, Width = 180 };
+            var lblPassword = new Label() { Text = "Password:", Left = 5, Top = 60 };
+            var txtPassword = new TextBox() { Left = 105, Top = 60, Width = 180, UseSystemPasswordChar = true };
 
-            var lblPassword = new Label() { Text = "Password:", Left = 10, Top = 60 };
-            var txtPassword = new TextBox() { Left = 100, Top = 60, Width = 180, UseSystemPasswordChar = true };
-
-            var lblConfirm = new Label() { Text = "Confirm:", Left = 10, Top = 100 };
-            var txtConfirm = new TextBox() { Left = 100, Top = 100, Width = 180, UseSystemPasswordChar = true };
-
+            var lblConfirm = new Label() { Text = "Confirm:", Left = 5, Top = 100 };
+            var txtConfirm = new TextBox() { Left = 105, Top = 100, Width = 180, UseSystemPasswordChar = true };
+            //Check Password Toggle
             var chkShow = new CheckBox() { Text = "Show Password", Left = 100, Top = 130 };
             chkShow.CheckedChanged += (s, e) =>
             {
@@ -35,7 +35,7 @@ namespace StudyChem.Forms
                 txtPassword.UseSystemPasswordChar = !visible;
                 txtConfirm.UseSystemPasswordChar = !visible;
             };
-
+            //Create user system
             var btnCreate = new Button() { Text = "Create", Left = 100, Top = 160 };
             btnCreate.Click += (sender, e) =>
             {
@@ -69,7 +69,7 @@ namespace StudyChem.Forms
                 MessageBox.Show("User created successfully.");
                 this.Close();
             };
-
+            //Adding controls to the form.
             Controls.Add(lblUsername);
             Controls.Add(txtUsername);
             Controls.Add(lblPassword);

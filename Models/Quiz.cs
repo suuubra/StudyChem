@@ -12,16 +12,17 @@ namespace StudyChem.Models
     /// </summary>
     public class Quiz
     {
+        //Title, Questions
         public string Title { get; set; }
         public List<Question> Questions { get; set; } = new List<Question>();
-
+        //Quiz loading system
         public static Quiz LoadFromFile(string filePath)
         {
             var json = File.ReadAllText(filePath);
             var questions = JsonConvert.DeserializeObject<List<Question>>(json);
             return new Quiz { Title = Path.GetFileNameWithoutExtension(filePath), Questions = questions };
         }
-
+        //Quiz folder setup
         public static Dictionary<string, Quiz> LoadAllPreloadedQuizzes()
         {
             var quizzes = new Dictionary<string, Quiz>();
@@ -33,7 +34,9 @@ namespace StudyChem.Models
             }
             return quizzes;
         }
-
+        /// <summary>
+        /// Shuffles the questions
+        /// </summary>
         public void Shuffle()
         {
             var rnd = new Random();

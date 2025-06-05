@@ -6,6 +6,9 @@ namespace StudyChem.Models
 {
     public class Question
     {
+        /// <summary>
+        /// Question system information.
+        /// </summary>
         public string Prompt { get; set; }
         public string Answer { get; set; }
         public int Points { get; set; } = 1;

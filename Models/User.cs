@@ -9,29 +9,30 @@ namespace StudyChem.Models
 {
     public class User
     {
+        
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public List<UserResult> Results { get; set; } = new List<UserResult>();
-
+        //Save user in .json file
         public void Save()
         {
             Directory.CreateDirectory(AppConstants.UserDataFolder);
             string path = Path.Combine(AppConstants.UserDataFolder, Username + ".json");
             File.WriteAllText(path, JsonConvert.SerializeObject(this, Formatting.Indented));
         }
-
+        //Loading user
         public static User Load(string username)
         {
             string path = Path.Combine(AppConstants.UserDataFolder, username + ".json");
             if (!File.Exists(path)) return null;
             return JsonConvert.DeserializeObject<User>(File.ReadAllText(path));
         }
-
+        //Double verify the password
         public bool VerifyPassword(string password)
         {
             return PasswordHash == Hash(password);
         }
-
+        //Encrypt the password
         public static string Hash(string input)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -41,7 +42,7 @@ namespace StudyChem.Models
             }
         }
     }
-
+    //Results
     public class UserResult
     {
         public double Score { get; set; }

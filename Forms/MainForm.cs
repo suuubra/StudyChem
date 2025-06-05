@@ -9,6 +9,7 @@ namespace StudyChem.Forms
 {
     public partial class MainForm : Form
     {
+        //Declarations
         private User currentUser;
         private Dictionary<string, Quiz> allQuizzes;
         private Quiz currentQuiz;
@@ -43,8 +44,8 @@ namespace StudyChem.Forms
 
 
             //Creation of labels and buttons and textboxes
-            var lblSelectTopic = new Label { Text = "Select Topic:", Left = 10, Top = 10 };
-            cmbTopics = new ComboBox { Left = 100, Top = 10, Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
+            var lblSelectTopic = new Label { Text = "Select Topic:", Left = 5, Top = 10 };
+            cmbTopics = new ComboBox { Left = 105, Top = 10, Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
             btnStart = new Button { Text = "Begin Quiz", Left = 370, Top = 10, Width = 100 };
 
             lblQuestion = new Label { Top = 60, Left = 10, Width = 700, Height = 60, Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold) };
