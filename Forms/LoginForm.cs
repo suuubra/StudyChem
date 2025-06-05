@@ -50,7 +50,9 @@ namespace StudyChem.Forms
             {
                 var reg = new RegisterForm();
                 reg.ShowDialog();
+
             };
+            //Comment
             //Adding controls to the form.
             Controls.Add(lblUsername);
             Controls.Add(txtUsername);
