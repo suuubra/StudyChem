@@ -20,7 +20,7 @@ namespace StudyChem.Forms
             this.Text = "StudyChem - Login";
             this.Width = 300;
             this.Height = 200;
-
+            //Draw/Create Componets
             var lblUsername = new Label() { Text = "Username:", Left = 5, Top = 20 };
             var txtUsername = new TextBox() { Left = 105, Top = 20, Width = 150 };
             var lblPassword = new Label() { Text = "Password:", Left = 5, Top = 60 };
