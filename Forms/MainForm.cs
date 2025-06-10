@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using StudyChem.Models;
 
 namespace StudyChem.Forms
@@ -84,12 +85,12 @@ namespace StudyChem.Forms
                 string statsPath = Path.Combine(AppConstants.StatsDataFolder, currentUser.Username + "_results.json");
                 try
                 {
-
-                    File.WriteAllText(statsPath, Newtonsoft.Json.JsonConvert.SerializeObject(currentUser.Results, Newtonsoft.Json.Formatting.Indented)); //Writing to the it,
-
-                } catch (Exception ex)
+                    File.WriteAllText(statsPath, JsonConvert.SerializeObject(currentUser.Results, Formatting.Indented));
+                }
+                catch (Exception ex)
                 {
-                    MessageBox.Show($"{ex}");  //Add error log logic here.
+                    ErrorLogger.Log("ExportStats", ex);
+                    MessageBox.Show("Failed to export stats.");
                 }
                 MessageBox.Show("Stats exported to: " + statsPath); 
             };
