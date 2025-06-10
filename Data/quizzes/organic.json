@@ -1,21 +1,147 @@
 ﻿[
   {
-    "Prompt": "What is the product of oxidising a primary alcohol?",
-    "Answer": "Carboxylic acid",
-    "Points": 1,
-    "Options": [
-      "Alkene",
-      "Ketone",
-      "Carboxylic acid",
-      "Ester"
-    ],
-    "Type": "MCQ"
-  },
-  {
-    "Prompt": "Esters are formed by a reaction between an alcohol and a carboxylic acid.",
+    "Prompt": "Alcohols can be oxidised to form carboxylic acids.",
     "Answer": "True",
     "Points": 1,
     "Options": [],
     "Type": "TF"
+  },
+  {
+    "Prompt": "What type of reaction occurs when an alkene reacts with hydrogen in the presence of a nickel catalyst?",
+    "Answer": "Addition",
+    "Points": 1,
+    "Options": [
+      "Substitution",
+      "Addition",
+      "Elimination",
+      "Condensation"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "A tertiary alcohol can be easily oxidised to form a ketone.",
+    "Answer": "False",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "What reagent is commonly used to convert a primary alcohol to an aldehyde?",
+    "Answer": "Acidified potassium dichromate",
+    "Points": 1,
+    "Options": [
+      "Concentrated sulfuric acid",
+      "Dilute hydrochloric acid",
+      "Acidified potassium dichromate",
+      "Ammoniacal silver nitrate"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Haloalkanes undergo substitution reactions with ammonia to form...",
+    "Answer": "Amines",
+    "Points": 1,
+    "Options": [
+      "Alcohols",
+      "Alkenes",
+      "Carboxylic acids",
+      "Amines"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Esters are formed from the reaction between a carboxylic acid and an alcohol.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which of the following compounds is formed when ethanoic acid reacts with ethanol?",
+    "Answer": "Ethyl ethanoate",
+    "Points": 1,
+    "Options": [
+      "Ethanoic anhydride",
+      "Ethanamide",
+      "Ethyl ethanoate",
+      "Ethene"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "A Z isomer in geometric isomerism has the highest priority groups on opposite sides of the double bond.",
+    "Answer": "False",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "What type of isomerism occurs in compounds with the same molecular formula but different functional groups?",
+    "Answer": "Functional group isomerism",
+    "Points": 1,
+    "Options": [
+      "Geometric isomerism",
+      "Chain isomerism",
+      "Functional group isomerism",
+      "Positional isomerism"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Alkenes can undergo polymerisation reactions.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which reagent would convert a carboxylic acid into an acyl chloride?",
+    "Answer": "SOCl₂",
+    "Points": 1,
+    "Options": [
+      "Br₂",
+      "NaOH",
+      "H₂SO₄",
+      "SOCl₂"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Substitution reactions typically occur with alkanes and haloalkanes.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which of the following is a product when propene reacts with hydrogen bromide?",
+    "Answer": "1-bromopropane",
+    "Points": 1,
+    "Options": [
+      "1-bromopropane",
+      "2-bromopropane",
+      "Propanoic acid",
+      "Propan-1-ol"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Condensation reactions result in the formation of small molecules such as water.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which polymer is formed from the monomer ethene?",
+    "Answer": "Polyethene",
+    "Points": 1,
+    "Options": [
+      "Polystyrene",
+      "Polypropene",
+      "Polyethene",
+      "PVC"
+    ],
+    "Type": "MCQ"
   }
 ]

@@ -15,6 +15,7 @@ namespace StudyChem.Models
         public List<string> Options { get; set; } = new List<string>();
         public string Type { get; set; } = "MCQ";
 
+        //Checks the selected Quiz.
         public bool Check(string input)
         {
             return input.Trim().Equals(Answer.Trim(), StringComparison.OrdinalIgnoreCase);

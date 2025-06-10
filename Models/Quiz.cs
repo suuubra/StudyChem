@@ -23,6 +23,7 @@ namespace StudyChem.Models
             return new Quiz { Title = Path.GetFileNameWithoutExtension(filePath), Questions = questions };
         }
         //Quiz folder setup
+        //Plus Preloaded quizzes.
         public static Dictionary<string, Quiz> LoadAllPreloadedQuizzes()
         {
             var quizzes = new Dictionary<string, Quiz>();

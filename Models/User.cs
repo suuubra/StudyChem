@@ -10,6 +10,7 @@ namespace StudyChem.Models
     public class User
     {
         
+        //Properites
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public List<UserResult> Results { get; set; } = new List<UserResult>();
@@ -42,6 +43,7 @@ namespace StudyChem.Models
             }
         }
     }
+
     //Results
     public class UserResult
     {

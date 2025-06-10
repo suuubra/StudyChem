@@ -1,21 +1,142 @@
 ﻿[
   {
-    "Prompt": "A catalyst affects the position of equilibrium.",
-    "Answer": "False",
-    "Points": 1,
-    "Options": [],
-    "Type": "TF"
-  },
-  {
-    "Prompt": "A large Kc value indicates that the equilibrium lies to the...",
+    "Prompt": "According to Le Chatelier’s Principle, increasing the concentration of a reactant will shift the equilibrium to the...",
     "Answer": "Right",
     "Points": 1,
     "Options": [
       "Left",
       "Right",
       "Neither",
-      "Unpredictable"
+      "It depends"
     ],
     "Type": "MCQ"
+  },
+  {
+    "Prompt": "At equilibrium, the concentrations of reactants and products are equal.",
+    "Answer": "False",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "A catalyst increases the rate at which equilibrium is reached but does not change the position of equilibrium.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "What does a large Kc value indicate about the position of equilibrium?",
+    "Answer": "Lies to the right",
+    "Points": 1,
+    "Options": [
+      "Lies to the left",
+      "Lies to the right",
+      "Equilibrium not established",
+      "Reaction is slow"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Decreasing the temperature in an exothermic reaction shifts the equilibrium to the...",
+    "Answer": "Right",
+    "Points": 1,
+    "Options": [
+      "Left",
+      "Right",
+      "No change",
+      "Can't be determined"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "The value of Kc changes when temperature changes.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Adding an inert gas at constant volume affects the position of equilibrium.",
+    "Answer": "False",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "If pressure is increased, the equilibrium will shift to the side with...",
+    "Answer": "Fewer moles of gas",
+    "Points": 1,
+    "Options": [
+      "More moles of gas",
+      "Fewer moles of gas",
+      "Equal moles of gas",
+      "No gas molecules"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "The equilibrium constant expression includes only gases and aqueous species.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "What happens to the position of equilibrium if the pressure is decreased in a system with more gas molecules on the reactant side?",
+    "Answer": "Shifts to the left",
+    "Points": 1,
+    "Options": [
+      "Shifts to the left",
+      "Shifts to the right",
+      "No change",
+      "Reaction stops"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Equilibrium can only occur in closed systems.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which of the following does NOT affect the position of equilibrium?",
+    "Answer": "Catalyst",
+    "Points": 1,
+    "Options": [
+      "Concentration",
+      "Pressure",
+      "Temperature",
+      "Catalyst"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "In an endothermic reaction, increasing the temperature shifts the equilibrium to the right.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "If a reaction has a Kc value of 1, it means...",
+    "Answer": "Products and reactants are at similar concentrations",
+    "Points": 1,
+    "Options": [
+      "Only reactants are present",
+      "Only products are present",
+      "Reaction is incomplete",
+      "Products and reactants are at similar concentrations"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "At equilibrium, the rate of the forward reaction is equal to the rate of the reverse reaction.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
   }
 ]

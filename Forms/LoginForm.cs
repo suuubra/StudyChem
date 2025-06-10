@@ -14,15 +14,18 @@ namespace StudyChem.Forms
             this.StartPosition = FormStartPosition.CenterScreen;
             InitializeLoginUI();
         }
-
+        //Setting up UI for Login
         private void InitializeLoginUI()
         {
+            //Form setup
             this.Text = "StudyChem - Login";
             this.Width = 300;
             this.Height = 200;
             //Draw/Create Componets
+            //Username
             var lblUsername = new Label() { Text = "Username:", Left = 5, Top = 20 };
             var txtUsername = new TextBox() { Left = 105, Top = 20, Width = 150 };
+            //Password
             var lblPassword = new Label() { Text = "Password:", Left = 5, Top = 60 };
             var txtPassword = new TextBox() { Left = 105, Top = 60, Width = 150, UseSystemPasswordChar = true };
             //Login system
@@ -52,7 +55,6 @@ namespace StudyChem.Forms
                 reg.ShowDialog();
 
             };
-            //Comment
             //Adding controls to the form.
             Controls.Add(lblUsername);
             Controls.Add(txtUsername);
