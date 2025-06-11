@@ -1,6 +1,6 @@
 ﻿[
   {
-    "Prompt": "What is the electron geometry of methane (CH\u2084)?",
+    "Prompt": "What is the electron geometry of methane (CH₄)?",
     "Answer": "Tetrahedral",
     "Points": 1,
     "Options": [
@@ -13,6 +13,132 @@
   },
   {
     "Prompt": "Does ionic bonding involve electron transfer?",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "What is the molecular geometry of water (H₂O)?",
+    "Answer": "Bent",
+    "Points": 1,
+    "Options": [
+      "Linear",
+      "Bent",
+      "Trigonal planar",
+      "Tetrahedral"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "A non-polar molecule can have polar bonds.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which intermolecular force exists between all molecules?",
+    "Answer": "Dispersion forces",
+    "Points": 1,
+    "Options": [
+      "Hydrogen bonding",
+      "Dipole-dipole interactions",
+      "Ionic bonding",
+      "Dispersion forces"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Ammonia (NH₃) has a trigonal planar shape.",
+    "Answer": "False",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which type of bonding occurs between two nonmetals?",
+    "Answer": "Covalent",
+    "Points": 1,
+    "Options": [
+      "Ionic",
+      "Metallic",
+      "Covalent",
+      "Hydrogen"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "What causes a molecule like CO₂ to be non-polar?",
+    "Answer": "Symmetrical shape cancels dipoles",
+    "Points": 1,
+    "Options": [
+      "Uneven charge distribution",
+      "Symmetrical shape cancels dipoles",
+      "Presence of hydrogen bonds",
+      "Single bonds only"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Polar molecules have permanent dipoles.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which molecule exhibits hydrogen bonding?",
+    "Answer": "H₂O",
+    "Points": 1,
+    "Options": [
+      "CH₄",
+      "HCl",
+      "H₂O",
+      "CO₂"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Linear molecular shapes have bond angles of approximately 180°.",
+    "Answer": "True",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which of the following affects the boiling point of a substance the most?",
+    "Answer": "Intermolecular forces",
+    "Points": 1,
+    "Options": [
+      "Molar mass",
+      "Electron configuration",
+      "Intermolecular forces",
+      "Bond angle"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "A molecule with polar bonds is always polar.",
+    "Answer": "False",
+    "Points": 1,
+    "Options": [],
+    "Type": "TF"
+  },
+  {
+    "Prompt": "Which electron geometry corresponds to a molecule with 3 bonding pairs and no lone pairs?",
+    "Answer": "Trigonal planar",
+    "Points": 1,
+    "Options": [
+      "Linear",
+      "Tetrahedral",
+      "Bent",
+      "Trigonal planar"
+    ],
+    "Type": "MCQ"
+  },
+  {
+    "Prompt": "Metallic bonding involves a sea of delocalised electrons.",
     "Answer": "True",
     "Points": 1,
     "Options": [],

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using StudyChem.Models;
 
 namespace StudyChem.Forms
@@ -10,6 +11,7 @@ namespace StudyChem.Forms
     public partial class MainForm : Form
     {
         //Declarations
+        //Buttons, Ints, etc.
         private User currentUser;
         private Dictionary<string, Quiz> allQuizzes;
         private Quiz currentQuiz;
@@ -33,8 +35,10 @@ namespace StudyChem.Forms
             InitializeQuizUI();
         }
 
+        //Setup the UI for the Quiz
         private void InitializeQuizUI()
         {
+            //Form setup
             this.Text = $"StudyChem - Welcome {currentUser.Username}";
             this.Width = 750;
             this.Height = 740;
@@ -44,16 +48,17 @@ namespace StudyChem.Forms
 
 
             //Creation of labels and buttons and textboxes
+            //select topic and drop down
             var lblSelectTopic = new Label { Text = "Select Topic:", Left = 5, Top = 10 };
             cmbTopics = new ComboBox { Left = 105, Top = 10, Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
             btnStart = new Button { Text = "Begin Quiz", Left = 370, Top = 10, Width = 100 };
-
+            //Question, and Submit button
             lblQuestion = new Label { Top = 60, Left = 10, Width = 700, Height = 60, Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold) };
             btnSubmit = new Button { Text = "Submit", Top = 270, Left = 10, Enabled = false, Width = 100 };
-
+            //Play Again and Exit Buttons
             btnPlayAgain = new Button { Text = "Play Again", Top = 270, Left = 120, Width = 100, Visible = false };
             btnExit = new Button { Text = "Exit", Top = 10, Left = 650, Width = 70, Visible = true };
-
+            //Stats box
             lblStats = new Label { Text = "Your Performance:", Top = 310, Left = 10, Width = 300, Font = new System.Drawing.Font("Segoe UI", 9, System.Drawing.FontStyle.Bold) };
             txtStats = new TextBox
             {
@@ -75,11 +80,19 @@ namespace StudyChem.Forms
                     MessageBox.Show("No results to export.");
                     return;
                 }
-
+                //Getting the Stats folder
                 Directory.CreateDirectory(AppConstants.StatsDataFolder);
                 string statsPath = Path.Combine(AppConstants.StatsDataFolder, currentUser.Username + "_results.json");
-                File.WriteAllText(statsPath, Newtonsoft.Json.JsonConvert.SerializeObject(currentUser.Results, Newtonsoft.Json.Formatting.Indented));
-                MessageBox.Show("Stats exported to: " + statsPath);
+                try
+                {
+                    File.WriteAllText(statsPath, JsonConvert.SerializeObject(currentUser.Results, Formatting.Indented));
+                }
+                catch (Exception ex)
+                {
+                    ErrorLogger.Log("ExportStats", ex);
+                    MessageBox.Show("Failed to export stats.");
+                }
+                MessageBox.Show("Stats exported to: " + statsPath); 
             };
 
             //Loading quizzes with foreach loop.
@@ -97,13 +110,15 @@ namespace StudyChem.Forms
                 var selected = cmbTopics.SelectedItem?.ToString();
                 if (string.IsNullOrWhiteSpace(selected) || !allQuizzes.ContainsKey(selected)) return;
 
+                
                 currentQuiz = allQuizzes[selected];
+                //If no quiz has been selected display error.
                 if (currentQuiz.Questions.Count == 0)
                 {
                     MessageBox.Show("Selected quiz has no questions.");
                     return;
                 }
-
+                
                 currentQuiz.Shuffle();
                 currentIndex = 0;
                 earnedPoints = 0;
@@ -112,23 +127,24 @@ namespace StudyChem.Forms
                 btnPlayAgain.Visible = false;
                 ShowQuestion();
             };
-            //Submit question, improved by disabling the submit questions.
+            //Submit question
             btnSubmit.Click += (s, e) =>
             {
                 if (currentQuiz == null || currentIndex >= currentQuiz.Questions.Count) return;
-
+                //Checking for answer selection before submit
                 var selected = optionButtons.FirstOrDefault(rb => rb.Checked);
                 if (selected == null)
                 {
                     MessageBox.Show("Please select an answer before submitting.");
                     return;
                 }
-
+                
                 var currentQuestion = currentQuiz.Questions[currentIndex];
+                //If answer is correct then display it.
                 if (selected.Text == currentQuestion.Answer)
                 {
                     earnedPoints += currentQuestion.Points;
-                    MessageBox.Show("Correct!");
+                    MessageBox.Show($"Correct! You got {currentQuestion.Points} point/s! \n Total: {earnedPoints} point/s.");
                 }
                 else
                 {

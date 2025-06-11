@@ -14,34 +14,50 @@ namespace StudyChem.Forms
             this.StartPosition = FormStartPosition.CenterScreen;
             InitializeLoginUI();
         }
-
+        //Setting up UI for Login
         private void InitializeLoginUI()
         {
+            //Form setup
             this.Text = "StudyChem - Login";
             this.Width = 300;
             this.Height = 200;
             //Draw/Create Componets
+            //Username
             var lblUsername = new Label() { Text = "Username:", Left = 5, Top = 20 };
             var txtUsername = new TextBox() { Left = 105, Top = 20, Width = 150 };
+            //Password
             var lblPassword = new Label() { Text = "Password:", Left = 5, Top = 60 };
             var txtPassword = new TextBox() { Left = 105, Top = 60, Width = 150, UseSystemPasswordChar = true };
             //Login system
             var btnLogin = new Button() { Text = "Login", Left = 100, Top = 100 };
+            // Login button logic
             btnLogin.Click += (sender, e) =>
             {
-                var user = User.Load(txtUsername.Text);
-                if (user != null && user.VerifyPassword(txtPassword.Text))
+                try
                 {
-                    //Opening new form whilst also closing this form.
-                    LoggedInUser = user;
-                    this.Hide();
-                    var main = new MainForm(LoggedInUser);
-                    main.ShowDialog();
-                    this.Close();
+                    var user = User.Load(txtUsername.Text);
+                    // Verifying credentials
+                    if (user != null && user.VerifyPassword(txtPassword.Text))
+                    {
+                        // Set active user and move to main form
+                        LoggedInUser = user;
+                        this.Hide();
+                        var main = new MainForm(LoggedInUser);
+                        main.ShowDialog();
+                        this.Close();
+                    }
+                    else
+                    {
+                        // Log failed login attempt (invalid credentials)
+                        ErrorLogger.LogMessage($"Login failed for user: {txtUsername.Text}");
+                        MessageBox.Show("Invalid credentials.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Invalid credentials.");
+                    // Log unexpected errors in login
+                    ErrorLogger.Log("LoginForm -> Login Click", ex);
+                    MessageBox.Show("An error occurred during login.");
                 }
             };
             //Register referral.
@@ -52,7 +68,6 @@ namespace StudyChem.Forms
                 reg.ShowDialog();
 
             };
-            //Comment
             //Adding controls to the form.
             Controls.Add(lblUsername);
             Controls.Add(txtUsername);

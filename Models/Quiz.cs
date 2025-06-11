@@ -18,11 +18,21 @@ namespace StudyChem.Models
         //Quiz loading system
         public static Quiz LoadFromFile(string filePath)
         {
-            var json = File.ReadAllText(filePath);
-            var questions = JsonConvert.DeserializeObject<List<Question>>(json);
-            return new Quiz { Title = Path.GetFileNameWithoutExtension(filePath), Questions = questions };
+            try
+            {
+                var json = File.ReadAllText(filePath);
+                var questions = JsonConvert.DeserializeObject<List<Question>>(json);
+                return new Quiz { Title = Path.GetFileNameWithoutExtension(filePath), Questions = questions };
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.Log(nameof(LoadFromFile), ex);
+                return new Quiz { Title = Path.GetFileNameWithoutExtension(filePath), Questions = new List<Question>() };
+            }
         }
+
         //Quiz folder setup
+        //Plus Preloaded quizzes.
         public static Dictionary<string, Quiz> LoadAllPreloadedQuizzes()
         {
             var quizzes = new Dictionary<string, Quiz>();

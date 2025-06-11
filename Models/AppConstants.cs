@@ -7,6 +7,7 @@ namespace StudyChem.Models
 {
     public static class AppConstants
     {
+        //Constants for the users data, quizzes data, and stats information.
         public const string UserDataFolder = "Data/users/";
         public const string QuizDataFolder = "Data/quizzes/";
         public const string StatsDataFolder = "Data/stats/";

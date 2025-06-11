@@ -99,6 +99,7 @@
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\AppConstants.cs" />
+    <Compile Include="Models\ErrorLogger.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Quiz.cs" />
     <Compile Include="Models\User.cs" />
@@ -139,6 +140,9 @@
   <ItemGroup>
     <Folder Include="Data\stats\" />
     <Folder Include="Data\users\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Logs\error_log.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

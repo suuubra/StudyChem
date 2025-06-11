@@ -1,4 +1,5 @@
 ﻿using StudyChem.Forms;
+using StudyChem.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,17 @@ namespace StudyChem
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginForm());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new LoginForm());
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.Log("Main", ex);
+            }
         }
+
     }
 }
