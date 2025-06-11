@@ -25,6 +25,7 @@ namespace StudyChem.Models
 
                 // Create detailed error message
                 var sb = new StringBuilder();
+                //Using Append to create a structured error message.
                 sb.AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]");
                 sb.AppendLine($"Context: {context}");
                 sb.AppendLine($"Message: {ex.Message}");
