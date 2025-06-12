@@ -27,7 +27,14 @@ namespace StudyChem.Forms
         private Label lblQuestion;
         private Label lblStats;
         private TextBox txtStats;
+        private TextBox txtQuestions;
+        private Label lblQuestions;
 
+        private Button btnAttemptEnter;
+
+        const int MIN_QUESTIONS = 0;
+        const int MAX_QUESTIONS = 15;
+        const int ATTEMPT_QUESTIONS = 0;
         public MainForm(User user)
         {
             currentUser = user;
@@ -52,6 +59,83 @@ namespace StudyChem.Forms
             var lblSelectTopic = new Label { Text = "Select Topic:", Left = 5, Top = 10 };
             cmbTopics = new ComboBox { Left = 105, Top = 10, Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
             btnStart = new Button { Text = "Begin Quiz", Left = 370, Top = 10, Width = 100 };
+
+            //Range Questions
+            txtQuestions = new TextBox { Left = 250, Top = 40, Width = 100 };
+            txtQuestions.KeyDown += (s, e) =>
+            {
+                if(e.KeyCode == Keys.Enter)
+                {
+
+                    string userInput = txtQuestions.Text;
+                    if (int.TryParse(userInput, out int attemptQuestions))
+                    {
+                        if (attemptQuestions < MIN_QUESTIONS || attemptQuestions > MAX_QUESTIONS)
+                        {
+                            MessageBox.Show($"Out of Range, please enter a number between {MIN_QUESTIONS} and {MAX_QUESTIONS}");
+                        }
+                        else
+                        {
+
+                            var ATTEMPT_QUESTIONS = attemptQuestions;
+                            MessageBox.Show($"Set to {ATTEMPT_QUESTIONS}");
+
+                            currentQuiz.Shuffle();
+                            currentIndex = 0;
+                            earnedPoints = 0;
+                            btnStart.Enabled = false;
+                            cmbTopics.Visible = false;
+                            btnPlayAgain.Visible = false;
+                            ShowQuestion();
+
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Please enter a integer number e.g. 1,2,3,4 -> between {MIN_QUESTIONS} - {MAX_QUESTIONS}.");
+                    }
+                }
+            };
+            btnAttemptEnter = new Button { Text = "Enter", Left = 350, Top = 40, Width = 50 };
+            btnAttemptEnter.Click += (s, e) =>
+            {
+                string userInput = txtQuestions.Text;
+                if (int.TryParse(userInput, out int attemptQuestions))
+                {
+                    if(attemptQuestions < MIN_QUESTIONS || attemptQuestions > MAX_QUESTIONS)
+                    {
+                        MessageBox.Show($"Out of Range, please enter a number between {MIN_QUESTIONS} and {MAX_QUESTIONS}");
+                    } else
+                    {
+
+                        var ATTEMPT_QUESTIONS = attemptQuestions;
+                        MessageBox.Show($"Set to {ATTEMPT_QUESTIONS}");
+
+                        currentQuiz.Shuffle();
+                        currentIndex = 0;
+                        earnedPoints = 0;
+                        btnStart.Enabled = false;
+                        cmbTopics.Visible = false;
+                        btnPlayAgain.Visible = false;
+                        ShowQuestion();
+
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Please enter a integer number e.g. 1,2,3,4 -> between {MIN_QUESTIONS} - {MAX_QUESTIONS}.");
+                }
+
+            };
+
+            lblQuestions = new Label { Text = "Enter No. Of Questions:", Left = 105, Top = 40, Width = 400,Font = new System.Drawing.Font("Segoe UI", 9, System.Drawing.FontStyle.Bold) };
+
+            txtQuestions.Visible = false;
+            lblQuestions.Visible = false;
+            btnAttemptEnter.Visible = false;
+            txtQuestions.Enabled = false;
+            lblQuestions.Enabled = false;
+            btnAttemptEnter.Enabled = false;
             //Question, and Submit button
             lblQuestion = new Label { Top = 60, Left = 10, Width = 700, Height = 60, Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold) };
             btnSubmit = new Button { Text = "Submit", Top = 270, Left = 10, Enabled = false, Width = 100 };
@@ -107,6 +191,7 @@ namespace StudyChem.Forms
             //Start Quizzing system
             btnStart.Click += (s, e) =>
             {
+
                 var selected = cmbTopics.SelectedItem?.ToString();
                 if (string.IsNullOrWhiteSpace(selected) || !allQuizzes.ContainsKey(selected)) return;
 
@@ -118,18 +203,20 @@ namespace StudyChem.Forms
                     MessageBox.Show("Selected quiz has no questions.");
                     return;
                 }
-                
-                currentQuiz.Shuffle();
-                currentIndex = 0;
-                earnedPoints = 0;
-                btnStart.Enabled = false;
-                cmbTopics.Visible = false;
-                btnPlayAgain.Visible = false;
-                ShowQuestion();
+                txtQuestions.Visible = true;
+                lblQuestions.Visible = true;
+                btnAttemptEnter.Visible = true;
+
+                txtQuestions.Enabled = true;
+                lblQuestions.Enabled = true;
+                btnAttemptEnter.Enabled = true;
+
+
             };
             //Submit question
             btnSubmit.Click += (s, e) =>
             {
+                
                 if (currentQuiz == null || currentIndex >= currentQuiz.Questions.Count) return;
                 //Checking for answer selection before submit
                 var selected = optionButtons.FirstOrDefault(rb => rb.Checked);
@@ -184,6 +271,7 @@ namespace StudyChem.Forms
             //Adding Controls to the form.
             Controls.Add(lblSelectTopic);
             Controls.Add(cmbTopics);
+            Controls.Add(txtQuestions);
             Controls.Add(btnStart);
             Controls.Add(lblQuestion);
             Controls.Add(btnSubmit);
@@ -191,6 +279,8 @@ namespace StudyChem.Forms
             Controls.Add(btnExit);
             Controls.Add(lblStats);
             Controls.Add(txtStats);
+            Controls.Add(btnAttemptEnter);
+            Controls.Add(lblQuestions);
             Controls.Add(btnExportStats);
             //Display statistics.
             DisplayStats();
