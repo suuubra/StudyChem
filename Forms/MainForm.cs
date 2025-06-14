@@ -10,13 +10,15 @@ namespace StudyChem.Forms
 {
     public partial class MainForm : Form
     {
-        //Declarations
-        //Buttons, Ints, etc.
+        // Declarations
         private User currentUser;
         private Dictionary<string, Quiz> allQuizzes;
         private Quiz currentQuiz;
         private int currentIndex;
         private int earnedPoints;
+        private int attemptLimit = 0; // Number of questions user wants to attempt
+
+        // UI elements
         private List<RadioButton> optionButtons = new List<RadioButton>();
         private ComboBox cmbTopics;
         private Button btnStart;
@@ -24,17 +26,17 @@ namespace StudyChem.Forms
         private Button btnPlayAgain;
         private Button btnExit;
         private Button btnExportStats;
+        private Button btnAttemptEnter;
         private Label lblQuestion;
         private Label lblStats;
+        private Label lblQuestions;
         private TextBox txtStats;
         private TextBox txtQuestions;
-        private Label lblQuestions;
 
-        private Button btnAttemptEnter;
+        // Constants
+        private const int MIN_QUESTIONS = 1;
+        private const int MAX_QUESTIONS = 15;
 
-        const int MIN_QUESTIONS = 0;
-        const int MAX_QUESTIONS = 15;
-        const int ATTEMPT_QUESTIONS = 0;
         public MainForm(User user)
         {
             currentUser = user;
@@ -42,10 +44,9 @@ namespace StudyChem.Forms
             InitializeQuizUI();
         }
 
-        //Setup the UI for the Quiz
+        // Set up all UI controls
         private void InitializeQuizUI()
         {
-            //Form setup
             this.Text = $"StudyChem - Welcome {currentUser.Username}";
             this.Width = 750;
             this.Height = 740;
@@ -53,96 +54,27 @@ namespace StudyChem.Forms
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
 
-
-            //Creation of labels and buttons and textboxes
-            //select topic and drop down
+            // Topic selector
             var lblSelectTopic = new Label { Text = "Select Topic:", Left = 5, Top = 10 };
             cmbTopics = new ComboBox { Left = 105, Top = 10, Width = 250, DropDownStyle = ComboBoxStyle.DropDownList };
             btnStart = new Button { Text = "Begin Quiz", Left = 370, Top = 10, Width = 100 };
 
-            //Range Questions
+            // Question attempt input
+            lblQuestions = new Label { Text = "Enter No. Of Questions:", Left = 105, Top = 40, Width = 400, Font = new System.Drawing.Font("Segoe UI", 9, System.Drawing.FontStyle.Bold) };
             txtQuestions = new TextBox { Left = 250, Top = 40, Width = 100 };
-            txtQuestions.KeyDown += (s, e) =>
-            {
-                if(e.KeyCode == Keys.Enter)
-                {
+            btnAttemptEnter = new Button { Text = "Enter", Left = 360, Top = 40, Width = 70 };
 
-                    string userInput = txtQuestions.Text;
-                    if (int.TryParse(userInput, out int attemptQuestions))
-                    {
-                        if (attemptQuestions < MIN_QUESTIONS || attemptQuestions > MAX_QUESTIONS)
-                        {
-                            MessageBox.Show($"Out of Range, please enter a number between {MIN_QUESTIONS} and {MAX_QUESTIONS}");
-                        }
-                        else
-                        {
+            // Hide these until quiz is selected
+            lblQuestions.Visible = txtQuestions.Visible = btnAttemptEnter.Visible = false;
+            lblQuestions.Enabled = txtQuestions.Enabled = btnAttemptEnter.Enabled = false;
 
-                            var ATTEMPT_QUESTIONS = attemptQuestions;
-                            MessageBox.Show($"Set to {ATTEMPT_QUESTIONS}");
-
-                            currentQuiz.Shuffle();
-                            currentIndex = 0;
-                            earnedPoints = 0;
-                            btnStart.Enabled = false;
-                            cmbTopics.Visible = false;
-                            btnPlayAgain.Visible = false;
-                            ShowQuestion();
-
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Please enter a integer number e.g. 1,2,3,4 -> between {MIN_QUESTIONS} - {MAX_QUESTIONS}.");
-                    }
-                }
-            };
-            btnAttemptEnter = new Button { Text = "Enter", Left = 350, Top = 40, Width = 50 };
-            btnAttemptEnter.Click += (s, e) =>
-            {
-                string userInput = txtQuestions.Text;
-                if (int.TryParse(userInput, out int attemptQuestions))
-                {
-                    if(attemptQuestions < MIN_QUESTIONS || attemptQuestions > MAX_QUESTIONS)
-                    {
-                        MessageBox.Show($"Out of Range, please enter a number between {MIN_QUESTIONS} and {MAX_QUESTIONS}");
-                    } else
-                    {
-
-                        var ATTEMPT_QUESTIONS = attemptQuestions;
-                        MessageBox.Show($"Set to {ATTEMPT_QUESTIONS}");
-
-                        currentQuiz.Shuffle();
-                        currentIndex = 0;
-                        earnedPoints = 0;
-                        btnStart.Enabled = false;
-                        cmbTopics.Visible = false;
-                        btnPlayAgain.Visible = false;
-                        ShowQuestion();
-
-                    }
-                }
-                else
-                {
-                    MessageBox.Show($"Please enter a integer number e.g. 1,2,3,4 -> between {MIN_QUESTIONS} - {MAX_QUESTIONS}.");
-                }
-
-            };
-
-            lblQuestions = new Label { Text = "Enter No. Of Questions:", Left = 105, Top = 40, Width = 400,Font = new System.Drawing.Font("Segoe UI", 9, System.Drawing.FontStyle.Bold) };
-
-            txtQuestions.Visible = false;
-            lblQuestions.Visible = false;
-            btnAttemptEnter.Visible = false;
-            txtQuestions.Enabled = false;
-            lblQuestions.Enabled = false;
-            btnAttemptEnter.Enabled = false;
-            //Question, and Submit button
-            lblQuestion = new Label { Top = 60, Left = 10, Width = 700, Height = 60, Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold) };
+            // Question display
+            lblQuestion = new Label { Top = 80, Left = 10, Width = 700, Height = 60, Font = new System.Drawing.Font("Segoe UI", 10, System.Drawing.FontStyle.Bold) };
             btnSubmit = new Button { Text = "Submit", Top = 270, Left = 10, Enabled = false, Width = 100 };
-            //Play Again and Exit Buttons
             btnPlayAgain = new Button { Text = "Play Again", Top = 270, Left = 120, Width = 100, Visible = false };
-            btnExit = new Button { Text = "Exit", Top = 10, Left = 650, Width = 70, Visible = true };
-            //Stats box
+            btnExit = new Button { Text = "Exit", Top = 10, Left = 650, Width = 70 };
+
+            // Stats display
             lblStats = new Label { Text = "Your Performance:", Top = 310, Left = 10, Width = 300, Font = new System.Drawing.Font("Segoe UI", 9, System.Drawing.FontStyle.Bold) };
             txtStats = new TextBox
             {
@@ -155,141 +87,100 @@ namespace StudyChem.Forms
                 Height = 280,
                 Font = new System.Drawing.Font("Consolas", 9)
             };
-            //Export system.
-            btnExportStats = new Button { Text = "Export Stats", Top = 630, Left = 10, Width = 120 };
-            btnExportStats.Click += (s, e) =>
-            {
-                if (currentUser.Results.Count == 0)
-                {
-                    MessageBox.Show("No results to export.");
-                    return;
-                }
-                //Getting the Stats folder
-                Directory.CreateDirectory(AppConstants.StatsDataFolder);
-                string statsPath = Path.Combine(AppConstants.StatsDataFolder, currentUser.Username + "_results.json");
-                try
-                {
-                    File.WriteAllText(statsPath, JsonConvert.SerializeObject(currentUser.Results, Formatting.Indented));
-                }
-                catch (Exception ex)
-                {
-                    ErrorLogger.Log("ExportStats", ex);
-                    MessageBox.Show("Failed to export stats.");
-                }
-                MessageBox.Show("Stats exported to: " + statsPath); 
-            };
 
-            //Loading quizzes with foreach loop.
+            // Export stats
+            btnExportStats = new Button { Text = "Export Stats", Top = 630, Left = 10, Width = 120 };
+            btnExportStats.Click += ExportStats;
+
+            // Add loaded quizzes to dropdown
             allQuizzes = Quiz.LoadAllPreloadedQuizzes();
             foreach (var key in allQuizzes.Keys)
                 cmbTopics.Items.Add(key);
-
             if (cmbTopics.Items.Count > 0)
                 cmbTopics.SelectedIndex = 0;
 
-
-            //Start Quizzing system
-            btnStart.Click += (s, e) =>
+            // Add controls to form
+            Controls.AddRange(new Control[]
             {
+                lblSelectTopic, cmbTopics, btnStart, btnExit,
+                lblQuestions, txtQuestions, btnAttemptEnter,
+                lblQuestion, btnSubmit, btnPlayAgain,
+                lblStats, txtStats, btnExportStats
+            });
 
-                var selected = cmbTopics.SelectedItem?.ToString();
-                if (string.IsNullOrWhiteSpace(selected) || !allQuizzes.ContainsKey(selected)) return;
-
-                
-                currentQuiz = allQuizzes[selected];
-                //If no quiz has been selected display error.
-                if (currentQuiz.Questions.Count == 0)
-                {
-                    MessageBox.Show("Selected quiz has no questions.");
-                    return;
-                }
-                txtQuestions.Visible = true;
-                lblQuestions.Visible = true;
-                btnAttemptEnter.Visible = true;
-
-                txtQuestions.Enabled = true;
-                lblQuestions.Enabled = true;
-                btnAttemptEnter.Enabled = true;
-
-
-            };
-            //Submit question
-            btnSubmit.Click += (s, e) =>
-            {
-                
-                if (currentQuiz == null || currentIndex >= currentQuiz.Questions.Count) return;
-                //Checking for answer selection before submit
-                var selected = optionButtons.FirstOrDefault(rb => rb.Checked);
-                if (selected == null)
-                {
-                    MessageBox.Show("Please select an answer before submitting.");
-                    return;
-                }
-                
-                var currentQuestion = currentQuiz.Questions[currentIndex];
-                //If answer is correct then display it.
-                if (selected.Text == currentQuestion.Answer)
-                {
-                    earnedPoints += currentQuestion.Points;
-                    MessageBox.Show($"Correct! You got {currentQuestion.Points} point/s! \n Total: {earnedPoints} point/s.");
-                }
-                else
-                {
-                    MessageBox.Show("Incorrect. Correct answer: " + currentQuestion.Answer);
-                }
-
-                currentIndex++;
-                if (currentIndex < currentQuiz.Questions.Count)
-                {
-                    ShowQuestion();
-                }
-                else
-                {
-                    int totalPoints = currentQuiz.Questions.Sum(q => q.Points);
-                    double percent = (double)earnedPoints / totalPoints * 100;
-                    MessageBox.Show($"Quiz complete! Score: {percent:F1}%");
-                    currentUser.Results.Add(new UserResult { Score = percent, Timestamp = DateTime.Now });
-                    currentUser.Save();
-                    DisplayStats();
-                    btnSubmit.Enabled = false;
-                    btnPlayAgain.Visible = true;
-                }
-            };
-            //Replay button
-            btnPlayAgain.Click += (s, e) =>
-            {
-                cmbTopics.Visible = true;
-                btnStart.Enabled = true;
-                btnPlayAgain.Visible = false;
-                lblQuestion.Text = "";
-                foreach (var rb in optionButtons)
-                    Controls.Remove(rb);
-                optionButtons.Clear();
-            };
-            //Exit button.
+            // Hook up events
+            btnStart.Click += StartQuizPrompt;
+            btnAttemptEnter.Click += ConfirmQuestionAttempt;
+            btnSubmit.Click += SubmitAnswer;
+            btnPlayAgain.Click += ResetQuiz;
             btnExit.Click += (s, e) => Application.Exit();
-            //Adding Controls to the form.
-            Controls.Add(lblSelectTopic);
-            Controls.Add(cmbTopics);
-            Controls.Add(txtQuestions);
-            Controls.Add(btnStart);
-            Controls.Add(lblQuestion);
-            Controls.Add(btnSubmit);
-            Controls.Add(btnPlayAgain);
-            Controls.Add(btnExit);
-            Controls.Add(lblStats);
-            Controls.Add(txtStats);
-            Controls.Add(btnAttemptEnter);
-            Controls.Add(lblQuestions);
-            Controls.Add(btnExportStats);
-            //Display statistics.
+
             DisplayStats();
         }
         /// <summary>
-        /// Shows questions and loads the type TF or MCQ.
+        /// Starts the quiz by prompting for number of questions to attempt
+        /// </summary>
+        private void StartQuizPrompt(object sender, EventArgs e)
+        {
+            var selected = cmbTopics.SelectedItem?.ToString();
+            if (string.IsNullOrWhiteSpace(selected) || !allQuizzes.ContainsKey(selected))
+                return;
+
+            currentQuiz = allQuizzes[selected];
+
+            // Validate quiz has questions
+            if (currentQuiz.Questions.Count == 0)
+            {
+                MessageBox.Show("Selected quiz has no questions.");
+                return;
+            }
+
+            // Show inputs for attempt selection
+            lblQuestions.Visible = txtQuestions.Visible = btnAttemptEnter.Visible = true;
+            lblQuestions.Enabled = txtQuestions.Enabled = btnAttemptEnter.Enabled = true;
+        }
+
+        /// <summary>
+        /// Confirms how many questions the user wants to attempt and starts the quiz
+        /// </summary>
+        private void ConfirmQuestionAttempt(object sender, EventArgs e)
+        {
+            if (!int.TryParse(txtQuestions.Text, out int amount))
+            {
+                MessageBox.Show("Please enter a valid number.");
+                return;
+            }
+
+            if (amount < MIN_QUESTIONS || amount > MAX_QUESTIONS)
+            {
+                MessageBox.Show($"Please enter a number between {MIN_QUESTIONS} and {MAX_QUESTIONS}.");
+                return;
+            }
+
+            attemptLimit = Math.Min(amount, currentQuiz.Questions.Count);
+            currentQuiz.Shuffle();
+            currentIndex = 0;
+            earnedPoints = 0;
+
+            btnStart.Enabled = false;
+            cmbTopics.Visible = false;
+            btnPlayAgain.Visible = false;
+
+            ShowQuestion();
+        }
+
+        /// <summary>
+        /// Shows a single question on screen, handles both TF and MCQ types
         /// </summary>
         private void ShowQuestion()
         {
+            // End quiz if reached limit
+            if (currentIndex >= attemptLimit)
+            {
+                FinishQuiz();
+                return;
+            }
+
             var currentQuestion = currentQuiz.Questions[currentIndex];
             lblQuestion.Text = $"Q{currentIndex + 1}: {currentQuestion.Prompt}";
 
@@ -301,7 +192,7 @@ namespace StudyChem.Forms
             optionButtons.Clear();
 
             int top = 130;
-            List<string> opts = currentQuestion.Type == "TF" ? new List<string> { "True", "False" } : currentQuestion.Options;
+            var opts = currentQuestion.Type == "TF" ? new List<string> { "True", "False" } : currentQuestion.Options;
             foreach (var option in opts)
             {
                 var rb = new RadioButton { Text = option, Left = 10, Top = top, Width = 700 };
@@ -314,21 +205,119 @@ namespace StudyChem.Forms
             btnSubmit.Enabled = false;
         }
 
-
-        //If the option selected then the button gets enabled.
+        /// <summary>
+        /// Triggered when user selects an answer
+        /// </summary>
         private void Option_CheckedChanged(object sender, EventArgs e)
         {
             btnSubmit.Enabled = optionButtons.Any(rb => rb.Checked);
         }
-        //Display stats.
+
+        /// <summary>
+        /// Submits the selected answer, gives feedback, moves to next question
+        /// </summary>
+        private void SubmitAnswer(object sender, EventArgs e)
+        {
+            if (currentQuiz == null || currentIndex >= currentQuiz.Questions.Count)
+                return;
+
+            var selected = optionButtons.FirstOrDefault(rb => rb.Checked);
+            if (selected == null)
+            {
+                MessageBox.Show("Please select an answer before submitting.");
+                return;
+            }
+
+            var currentQuestion = currentQuiz.Questions[currentIndex];
+
+            if (selected.Text == currentQuestion.Answer)
+            {
+                earnedPoints += currentQuestion.Points;
+                MessageBox.Show($"Correct! +{currentQuestion.Points} point(s).");
+            }
+            else
+            {
+                MessageBox.Show($"Incorrect. Correct answer was: {currentQuestion.Answer}");
+            }
+
+            currentIndex++;
+            ShowQuestion();
+        }
+
+        /// <summary>
+        /// Finalises the quiz, calculates score, and saves result
+        /// </summary>
+        private void FinishQuiz()
+        {
+            int totalPoints = currentQuiz.Questions.Take(attemptLimit).Sum(q => q.Points);
+            double percent = totalPoints > 0 ? (double)earnedPoints / totalPoints * 100 : 0;
+
+            MessageBox.Show($"Quiz complete! You scored: {percent:F1}%");
+
+            currentUser.Results.Add(new UserResult { Score = percent, Timestamp = DateTime.Now });
+            currentUser.Save();
+
+            DisplayStats();
+
+            btnSubmit.Enabled = false;
+            btnPlayAgain.Visible = true;
+        }
+
+        /// <summary>
+        /// Resets UI to allow replay
+        /// </summary>
+        private void ResetQuiz(object sender, EventArgs e)
+        {
+            cmbTopics.Visible = true;
+            btnStart.Enabled = true;
+            btnPlayAgain.Visible = false;
+            lblQuestion.Text = "";
+            txtQuestions.Clear();
+            attemptLimit = 0;
+
+            foreach (var rb in optionButtons)
+                Controls.Remove(rb);
+            optionButtons.Clear();
+        }
+
+        /// <summary>
+        /// Displays quiz history in stats box
+        /// </summary>
         private void DisplayStats()
         {
             txtStats.Clear();
             txtStats.AppendText("Your past quiz results:\r\n\r\n");
-            foreach (var r in currentUser.Results.OrderByDescending(r => r.Timestamp))
+
+            foreach (var result in currentUser.Results.OrderByDescending(r => r.Timestamp))
+                txtStats.AppendText($"{result.Timestamp:g} - {result.Score:F1}%\r\n");
+        }
+
+        /// <summary>
+        /// Exports stats to a JSON file in Stats folder
+        /// </summary>
+        private void ExportStats(object sender, EventArgs e)
+        {
+            if (currentUser.Results.Count == 0)
             {
-                txtStats.AppendText($"{r.Timestamp:g} - {r.Score:F1}%\r\n");
+                MessageBox.Show("No results to export.");
+                return;
             }
+
+            Directory.CreateDirectory(AppConstants.StatsDataFolder);
+            string statsPath = Path.Combine(AppConstants.StatsDataFolder, currentUser.Username + "_results.json");
+
+            try
+            {
+                File.WriteAllText(statsPath, JsonConvert.SerializeObject(currentUser.Results, Formatting.Indented));
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.Log("ExportStats", ex);
+                MessageBox.Show("Failed to export stats.");
+                return;
+            }
+
+            MessageBox.Show($"Stats exported to:\n{statsPath}");
         }
     }
 }
