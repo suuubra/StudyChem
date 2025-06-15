@@ -153,7 +153,8 @@ namespace StudyChem.Forms
 
             if (amount < MIN_QUESTIONS || amount > MAX_QUESTIONS)
             {
-                MessageBox.Show($"Please enter a number between {MIN_QUESTIONS} and {MAX_QUESTIONS}.");
+                MessageBox.Show($"You entered {amount} which is not in the range. \n Please enter a number between {MIN_QUESTIONS} and {MAX_QUESTIONS}.");
+                txtQuestions.Text = "";
                 return;
             }
 
@@ -191,11 +192,11 @@ namespace StudyChem.Forms
             }
             optionButtons.Clear();
 
-            int top = 130;
+            int top = 150;
             var opts = currentQuestion.Type == "TF" ? new List<string> { "True", "False" } : currentQuestion.Options;
             foreach (var option in opts)
             {
-                var rb = new RadioButton { Text = option, Left = 10, Top = top, Width = 700 };
+                var rb = new RadioButton { Text = option, Left = 30, Top = top, Width = 700 };
                 rb.CheckedChanged += Option_CheckedChanged;
                 optionButtons.Add(rb);
                 Controls.Add(rb);
